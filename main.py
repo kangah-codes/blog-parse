@@ -21,16 +21,14 @@ class Parser:
 		self.links = []
 
 	def parse_headings(self, text):
-		for i in re.findall(r'!(h\d){(.*)}', text):
-			self.headings.append(f"<{i[0]}>{i[1]}</{i[0]}>")
+		return re.sub(r'!(h\d){(.*)}', r'<\1>\2</\1>', text)
+
 
 	def parse_paragraphs(self, text):
-		for i in re.findall(r'!(p){(.*)}', text):
-			self.paragraphs.append(f"<{i[0]}>{i[1]}</{i[0]}>")
+		return re.sub(r'!p{(.*)}', r'<p>\1</p>', text)
 
 	def parse_quotes(self, text):
-		for i in re.findall(r'!(quote){(.*)}', text):
-			self.paragraphs.append(f"<blockquote><p>{i[1]}</p></blockquote>")
+		return re.sub(r'!quote_(h\d){(.*)}', r'<blockquote><\1>\2</\1></blockquote>', text)
 
 	def parse_tables(self, text):
 		pass
@@ -43,14 +41,15 @@ a = """
 
 !p{The last thing}
 
+!quote_h6{LMAO}
+
 """
 
 p = Parser(a)
 
-p.parse_headings(a)
-p.parse_paragraphs(a)
-print(p.headings)
-print(p.paragraphs)
+print(p.parse_headings(a))
+print(p.parse_paragraphs(a))
+print(p.parse_quotes(a))
 
 
 							
