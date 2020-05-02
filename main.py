@@ -23,7 +23,6 @@ class Parser:
 	def parse_headings(self, text):
 		return re.sub(r'!(h\d){(.*)}', r'<\1>\2</\1>', text)
 
-
 	def parse_paragraphs(self, text):
 		return re.sub(r'!p{(.*)}', r'<p>\1</p>', text)
 
@@ -31,25 +30,45 @@ class Parser:
 		return re.sub(r'!quote_(h\d){(.*)}', r'<blockquote><\1>\2</\1></blockquote>', text)
 
 	def parse_tables(self, text):
-		pass
+		"""
+		<table>
+		<thead>
+		<tr>
+		<th>Name</th>
+		<th>Age</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+		<td>Bob</td>
+		<td>27</td>
+		</tr>
+		<tr>
+		<td>Alice</td>
+		<td>23</td>
+		</tr>
+		</tbody>
+		</table>
+		!table_th{Name}_th{Age}_td{Lmao}_td{Lmao}
+		"""
+		return re.sub(r'!table_(th{.*}){.}', r'lol', text)
+
+	def parse_lists(self, text, typeof):
+		if typeof == 'ol':
+			#print(re.findall(r'!ol_li{(.*)}', text))
+			print(re.sub(r'!ol_(li{(.*)})|(li{(.*)})', r'<ol><li>\2</li></ol>', text))
 
 
 a = """
-!h5{Hello my guy} 
-!h2{lmao} 
-!h7{sdfa}
-
-!p{The last thing}
-
-!quote_h6{LMAO}
+!ol_li{YEAH}_li{lmao}
+!ol_li{OKAY}
+!ol_li{lol}
 
 """
 
 p = Parser(a)
 
-print(p.parse_headings(a))
-print(p.parse_paragraphs(a))
-print(p.parse_quotes(a))
+print(p.parse_lists(a, 'ol'))
 
 
 							
